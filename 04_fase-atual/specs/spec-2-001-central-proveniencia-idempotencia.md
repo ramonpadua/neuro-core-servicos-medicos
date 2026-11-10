@@ -2,7 +2,7 @@
 
 **Fase:** 2 — Central financeira e ingestão multi-fonte  
 **Status:** planejada; implementação condicionada às pré-condições abaixo  
-**Dono:** Fábio Schneider, champion/responsável único; execução assistida pelo Ethos  
+**Dono operacional:** Maestro na execução técnica; Fábio Schneider nas respostas, teste e aceite (orientação de 10/11; registros históricos preservados)
 **Origem no escopo:** Fase 2; D-003/D-004; RQ-002, RQ-003, RQ-004, RQ-012  
 **Degrau da solução:** reuso do sistema existente e recursos nativos autorizados — preservar contrato e decisões da Fase 1.  
 **Data:** 2026-10-02
@@ -116,9 +116,70 @@ Referência por fase + título exato; UUID do portal pendente. Status vive nos c
 |---|---|---|---|
 | Confirmar o ambiente e a fonte do primeiro ciclo | CA-2-001 | F2-CONFIG-001 | Handoff F1-HANDOFF-001 |
 | Guardar um ciclo de teste na central | CA-2-002 | F2-CENTRAL-001 | Confirmar o ambiente e a fonte do primeiro ciclo |
-| Impedir duplicação após reinício | CA-2-003 | F2-IDEMP-001 | Guardar um ciclo de teste na central |
-| Recuperar o ciclo após uma falha | CA-2-004 | F2-ROLLBACK-001 | Impedir duplicação após reinício |
+| Conferir que repetir a entrada não cria registros duplicados | CA-2-003 | F2-IDEMP-001 | Guardar um ciclo de teste na central |
+| Conferir que uma falha não deixa dados pela metade | CA-2-004 | F2-ROLLBACK-001 | Conferir que repetir a entrada não cria registros duplicados |
 
 ## Emendas
 
 Nenhuma. Qualquer mudança de contrato ou autorização material deve ser registrada antes de executar.
+
+## Emenda de condução e referências recebidas — 10/11/2026
+
+## Como o Maestro deve conduzir esta fase (ajuste de clareza de 10/11/2026)
+
+Este ajuste é apenas documental. Não refaz o sistema, não altera escopo, critérios, dependências, IDs, prazos ou aprovações existentes. Não executa migrações, não acessa banco do cliente e não importa pacientes reais. A Fase 1, os arquivos de prova e as tarefas já marcadas como concluídas ficam intactos.
+
+O sistema organiza os atendimentos realizados, os valores e a conferência financeira por profissional, serviço, unidade, pagador e mês. Não é um CRM comercial nem prontuário clínico completo. A expressão "centralizador" da primeira conversa não autoriza criar funções comerciais novas.
+
+- **Quem faz a parte técnica:** o Maestro do projeto, reaproveitando o que já existe. Fábio responde perguntas da operação, testa a tela e confirma o resultado. Não pedir a ele comandos, código, configuração de banco, chaves técnicas, logs ou edição de arquivos.
+- **Antes de agir:** ler os registros da tarefa e explicar em poucas frases o que já existe, o que falta e o que será testado. Fazer uma pergunta por vez, somente quando a resposta ainda não estiver documentada. Uma tarefa por vez dentro da fase liberada. O consultor não é aprovador obrigatório entre tarefas; escalar apenas mudança de escopo/plano ou bloqueio fora da autonomia.
+- **Ao mostrar a tela:** dizer "Fábio, olha o Skip agora"; fornecer o link do projeto correto e o nome da seção que existe de fato. Mostrar uma ação por vez: onde clicar, o que deve aparecer e como reconhecer um erro. Esperar a resposta antes de pedir o próximo passo.
+- **Sem tela inventada:** os botões da T002 abaixo constam da prova de 15/10, mas não foram conferidos ao vivo nesta revisão. Nas tarefas seguintes, os passos descrevem o comportamento esperado; o Maestro deve primeiro identificar o controle real e explicar seu nome e posição. Se não existir, registrar a lacuna da própria tarefa, nunca mandar o cliente procurar um botão inexistente.
+- **Teste humano:** confirmar explicitamente "Testei e está correto" ou equivalente; registrar ação, resultado, evidência sem dados pessoais e versão. Silêncio ou teste automático não é aprovação humana. Não marcar tarefa nem seguir automaticamente.
+- **Segurança:** preparar testes técnicos com dados fictícios em ambiente isolado. Não conectar, consultar ou testar banco do cliente, mesmo em homologação. Se a comprovação exigir acesso real, parar e pedir ao consultor o caminho autorizado; o teste da interface é conduzido pelo próprio Fábio. Não usar as planilhas com pacientes como carga de teste. Não publicar, apagar, alterar permissões ou expor credenciais.
+
+### Qual registro seguir agora
+
+A Jornada do plano no Drive conserva T001 e T002 marcadas como concluídas e T003 em andamento (registro de 22/10). O repositório/pasta operacional conserva 1/12, com T002 em `aguardando_teste_humano` desde 15/10. **Nenhuma marcação foi rebaixada, promovida ou reconciliada nesta revisão.** A primeira ação segura é verificar se há aprovação posterior da T002. Se não houver, guiar somente o teste pendente descrito abaixo, sem reimplementar a T002 nem iniciar T003. Se a aprovação já existir, registrar sua referência e comunicar a divergência para sincronização, sem inventar aceite.
+
+### O que os documentos recebidos já esclarecem
+
+- A primeira call confirma que Fábio pretendia sair do MDMED para um sistema próprio. Não comprova qual sistema já substituiu o MDMED, seu endereço ou uma API funcionando. Não voltar a pedir a API do MDMED como premissa.
+- Ricardo, Isis e Victor Hugo já fornecem exemplos de data, paciente, pagador, serviço e valores, com contas diferentes por profissional/serviço. Na amostra de Ricardo: `Abril 26!F2 = E2*0.5` e `G4 = E4*0.8`; na de Victor Hugo: `G2 = F2*0.8` e `I2 = G2*0.5`; Isis: `E2 = D2*0.8`. Essas fórmulas demonstram o histórico, não a vigência nem a aprovação atual da regra.
+- O Modelo Faturamento Qualivida mostra a organização mensal por profissional/serviço e pagador; em `Mar26` há **21 categorias pagadoras mais a coluna Total**, não 22 pagadores. Inclui particular e prefeituras, não só convênios.
+- QLV2 já mostra valores, quantidades, médias, faixas de metas, bônus e capacidade. Há exemplos de bônus diferentes por pessoa, inclusive 150/300/450 e 100/150/200. Não aplicar uma faixa universal nem chamar capacidade de meta aprovada.
+- Spike2 organiza quantidades por nome, unidade, exame e mês, além de indicadores internos. A função de cada nome (solicitante, executor ou laudador) deve ser confirmada; o arquivo sozinho não prova que são laudadores. Seu histórico se estende até 2026, não apenas 2022.
+- Há divergência entre a aba e datas, nomes com acentuação corrompida, cabeçalhos diferentes e meses sem aba. Tratar como pendências de qualidade, não corrigir datas nem completar valores por suposição. Aba ausente não prova atendimento ausente.
+
+**Não recobrar os seis arquivos já entregues.** Usá-los como referência. Ainda faltam: identificação da aplicação própria e responsável técnico, viabilidade/documentação da conexão, amostra e permissão do PDF caso necessário, catálogo e identidades vigentes antes de dados reais. Regras de repasse/comissão, período de validade, significado de cada valor e baseline de tempo só serão confirmados no momento previsto das fases seguintes; não criar cálculo financeiro na Fase 2. Importação automática de Excel não passa a fazer parte do escopo por esta revisão.
+
+### Onde Fábio responde
+
+Responder no chat do seu Maestro, na conversa da tarefa. Exemplo da T005: "Meu sistema próprio é [nome/link]. Quem cuida dele é [nome]. Ele já está em uso/em construção/não sei". O Maestro registra a resposta na tarefa; se precisar documentação técnica, explica quem deve fornecê-la e por quê. Senhas/chaves não vão no chat, no repositório ou na descrição da tarefa.
+
+### F2-T002 — Guardar um ciclo de teste na central
+
+**Antes do teste:** o Maestro confere somente os registros do encaminhamento da pendência de segurança do arquivo `.env`, já anotada na T001. Não abre valores, não solicita comandos ao Fábio e não presume segredo exposto. Se o tratamento não estiver comprovado, registra a pendência e pede ao consultor o caminho autorizado antes de executar o teste, sem reconstruir nada.
+**O que já existe:** a prova de 15/10 registra o ciclo de teste guardado e recuperável. Não pedir implementação de novo. **O que falta verificar:** se Fábio já aprovou o teste depois dessa data.
+**Passo a passo com Fábio:**
+1. O Maestro explica que vamos conferir apenas dados inventados e diz: "Fábio, olha o Skip agora". Informa o link registrado na prova: https://pagina-em-branco-ee3ec--preview.goskip.app . É referência histórica; se o projeto ou a tela mudou, parar e pedir que Fábio indique a página atual. Não iniciar outro app.
+2. Peça para localizar a seção "F2-T002 · Ciclo persistido na central" e clicar em "Atualizar consulta". Esperado: lote `F2-LOT-2026-10-001`, situação CONFIRMADO e uma emissão. Se não aparecer, pedir um print recortado da área, sem dados pessoais, e parar.
+3. Explique: "Agora atualize a página pelo botão de recarregar do navegador". Depois peça "Atualizar consulta" novamente. Esperado: o mesmo lote e a mesma emissão continuam lá; não sumiram nem aumentaram.
+4. Aponte quantidade 1 e os campos de valor sem preenchimento (`null`). Explique que vazio não significa valor zero e que não vamos inventar valor.
+5. Peça clicar uma vez em "Reimportar mesmo lote". Esperado: mensagem "DUPLICADO" (significa que o sistema reconheceu o mesmo dado e não criou outro). O total continua com uma emissão.
+6. Pergunte se tudo apareceu como descrito. Se sim, pedir "Testei e está correto" e registrar a aprovação vinculada à prova existente. Se der erro vermelho, sumir dado ou aumentar total, manter a pendência e tratar só a falha. Não concluir T003 junto.
+**Dono:** Maestro na orientação/verificação documental; Fábio no teste e aceite. **Prova:** F2-CENTRAL-001 / CA-2-002; nenhuma prova antiga é editada.
+
+### F2-T003 — Conferir que repetir a entrada não cria registros duplicados
+
+**Para que serve:** garantir que clicar de novo, recarregar a página ou receber o mesmo dado ao mesmo tempo não faça a clínica contar o atendimento duas vezes.
+**O Maestro faz:** confere primeiro o aceite humano da T002. Reaproveita a proteção já documentada; completa apenas os cenários faltantes de repetição após reinício, duas entradas simultâneas e mesmo identificador com conteúdo diferente. Prepara as simulações técnicas em ambiente isolado com dados fictícios; Fábio não precisa abrir código nem fazer requisições.
+**Fábio confere, uma etapa por vez:** (1) o Maestro mostra o total inicial do exemplo e explica o controle real a usar; (2) Fábio repete a entrada de teste e recarrega; o total fica igual; (3) o Maestro apresenta o resultado da simulação de duas entradas juntas: continua um único registro; (4) mostra uma tentativa de alterar o conteúdo usando a mesma identificação: aparece aviso de conflito e o original continua igual. Ao final, pedir aprovação explícita. Se não existir demonstração segura, registrar a falta; não pedir ao cliente uma operação técnica.
+**Depende:** T002 com teste humano comprovado. **Parar:** duplicata, alteração do original, teste que exija banco real ou evidência ausente. **Prova:** F2-IDEMP-001 / CA-2-003, SPEC-2-001.
+
+### F2-T004 — Conferir que uma falha não deixa dados pela metade
+
+**Para que serve:** uma entrada interrompida não deve deixar metade dos dados aparecendo como se estivesse tudo certo.
+**O Maestro faz:** prepara exemplos fictícios de interrupção no meio, usuário sem acesso, identidade sem correspondência e conteúdo clínico proibido; demonstra recuperação e retorno à versão anterior sem apagar histórico. Não pede que Fábio derrube conexão, altere permissões ou mexa no banco.
+**Fábio confere:** (1) observa o conjunto de teste antes; (2) vê a falha simulada e confirma que nenhum resultado pela metade aparece como concluído; (3) acompanha a repetição após corrigir o exemplo e vê o conjunto completo; (4) acompanha a volta à versão anterior e verifica que o histórico continua disponível. O Maestro informa nomes dos controles reais e o esperado antes de cada clique; pede aceite ao fim.
+**Depende:** T003 comprovada. **Parar:** perda de original, exposição parcial ou necessidade de acesso real não autorizado. **Prova:** F2-ROLLBACK-001 / CA-2-004, SPEC-2-001.

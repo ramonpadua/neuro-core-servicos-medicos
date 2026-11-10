@@ -2,7 +2,7 @@
 
 **Fase:** 2 — Central financeira e ingestão multi-fonte  
 **Status:** planejada; implementação condicionada às pré-condições abaixo  
-**Dono:** Fábio Schneider, champion/responsável único; execução assistida pelo Ethos  
+**Dono operacional:** Maestro na execução técnica; Fábio Schneider nas respostas, teste e aceite (orientação de 10/11; registros históricos preservados)
 **Origem no escopo:** Fase 2; D-003/D-004; RQ-002, RQ-003, RQ-004, RQ-006, RQ-012  
 **Degrau da solução:** reuso do sistema existente e recursos nativos autorizados — preservar contrato e decisões da Fase 1.  
 **Data:** 2026-10-02
@@ -116,11 +116,75 @@ Referência por fase + título exato; UUID do portal pendente. Status vive nos c
 
 | Task da Fase 2 | Critério | Prova | Pré-condições |
 |---|---|---|---|
-| Autorizar a pasta e o layout do fallback | CA-2-009 | F2-PDF-CONFIG-001 | Handoff F1-HANDOFF-001 |
-| Importar um demonstrativo pelo fallback | CA-2-010 | F2-PDF-001 | Autorizar a pasta e o layout do fallback; Guardar um ciclo de teste na central |
-| Separar PDFs ilegíveis e entradas repetidas | CA-2-011 | F2-PDF-ERROR-001 | Importar um demonstrativo pelo fallback |
-| Fechar as evidências do ciclo importado | CA-2-012 | F2-HANDOFF-001 | Recuperar o ciclo após uma falha; Demonstrar o resultado da entrada pela API; Separar PDFs ilegíveis e entradas repetidas |
+| Confirmar qual arquivo PDF pode ser usado como alternativa | CA-2-009 | F2-PDF-CONFIG-001 | Handoff F1-HANDOFF-001 |
+| Trazer um PDF de teste e conferir os dados na tela | CA-2-010 | F2-PDF-001 | Confirmar qual arquivo PDF pode ser usado como alternativa; Guardar um ciclo de teste na central |
+| Conferir arquivos ilegíveis, incompletos ou repetidos | CA-2-011 | F2-PDF-ERROR-001 | Trazer um PDF de teste e conferir os dados na tela |
+| Revisar o ciclo de teste e registrar a aprovação da fase | CA-2-012 | F2-HANDOFF-001 | Conferir que uma falha não deixa dados pela metade; Ver e aprovar o resultado da entrada pela conexão; Conferir arquivos ilegíveis, incompletos ou repetidos |
 
 ## Emendas
 
 Nenhuma. Qualquer mudança de contrato ou autorização material deve ser registrada antes de executar.
+
+## Emenda de condução e referências recebidas — 10/11/2026
+
+## Como o Maestro deve conduzir esta fase (ajuste de clareza de 10/11/2026)
+
+Este ajuste é apenas documental. Não refaz o sistema, não altera escopo, critérios, dependências, IDs, prazos ou aprovações existentes. Não executa migrações, não acessa banco do cliente e não importa pacientes reais. A Fase 1, os arquivos de prova e as tarefas já marcadas como concluídas ficam intactos.
+
+O sistema organiza os atendimentos realizados, os valores e a conferência financeira por profissional, serviço, unidade, pagador e mês. Não é um CRM comercial nem prontuário clínico completo. A expressão "centralizador" da primeira conversa não autoriza criar funções comerciais novas.
+
+- **Quem faz a parte técnica:** o Maestro do projeto, reaproveitando o que já existe. Fábio responde perguntas da operação, testa a tela e confirma o resultado. Não pedir a ele comandos, código, configuração de banco, chaves técnicas, logs ou edição de arquivos.
+- **Antes de agir:** ler os registros da tarefa e explicar em poucas frases o que já existe, o que falta e o que será testado. Fazer uma pergunta por vez, somente quando a resposta ainda não estiver documentada. Uma tarefa por vez dentro da fase liberada. O consultor não é aprovador obrigatório entre tarefas; escalar apenas mudança de escopo/plano ou bloqueio fora da autonomia.
+- **Ao mostrar a tela:** dizer "Fábio, olha o Skip agora"; fornecer o link do projeto correto e o nome da seção que existe de fato. Mostrar uma ação por vez: onde clicar, o que deve aparecer e como reconhecer um erro. Esperar a resposta antes de pedir o próximo passo.
+- **Sem tela inventada:** os botões da T002 abaixo constam da prova de 15/10, mas não foram conferidos ao vivo nesta revisão. Nas tarefas seguintes, os passos descrevem o comportamento esperado; o Maestro deve primeiro identificar o controle real e explicar seu nome e posição. Se não existir, registrar a lacuna da própria tarefa, nunca mandar o cliente procurar um botão inexistente.
+- **Teste humano:** confirmar explicitamente "Testei e está correto" ou equivalente; registrar ação, resultado, evidência sem dados pessoais e versão. Silêncio ou teste automático não é aprovação humana. Não marcar tarefa nem seguir automaticamente.
+- **Segurança:** preparar testes técnicos com dados fictícios em ambiente isolado. Não conectar, consultar ou testar banco do cliente, mesmo em homologação. Se a comprovação exigir acesso real, parar e pedir ao consultor o caminho autorizado; o teste da interface é conduzido pelo próprio Fábio. Não usar as planilhas com pacientes como carga de teste. Não publicar, apagar, alterar permissões ou expor credenciais.
+
+### Qual registro seguir agora
+
+A Jornada do plano no Drive conserva T001 e T002 marcadas como concluídas e T003 em andamento (registro de 22/10). O repositório/pasta operacional conserva 1/12, com T002 em `aguardando_teste_humano` desde 15/10. **Nenhuma marcação foi rebaixada, promovida ou reconciliada nesta revisão.** A primeira ação segura é verificar se há aprovação posterior da T002. Se não houver, guiar somente o teste pendente descrito abaixo, sem reimplementar a T002 nem iniciar T003. Se a aprovação já existir, registrar sua referência e comunicar a divergência para sincronização, sem inventar aceite.
+
+### O que os documentos recebidos já esclarecem
+
+- A primeira call confirma que Fábio pretendia sair do MDMED para um sistema próprio. Não comprova qual sistema já substituiu o MDMED, seu endereço ou uma API funcionando. Não voltar a pedir a API do MDMED como premissa.
+- Ricardo, Isis e Victor Hugo já fornecem exemplos de data, paciente, pagador, serviço e valores, com contas diferentes por profissional/serviço. Na amostra de Ricardo: `Abril 26!F2 = E2*0.5` e `G4 = E4*0.8`; na de Victor Hugo: `G2 = F2*0.8` e `I2 = G2*0.5`; Isis: `E2 = D2*0.8`. Essas fórmulas demonstram o histórico, não a vigência nem a aprovação atual da regra.
+- O Modelo Faturamento Qualivida mostra a organização mensal por profissional/serviço e pagador; em `Mar26` há **21 categorias pagadoras mais a coluna Total**, não 22 pagadores. Inclui particular e prefeituras, não só convênios.
+- QLV2 já mostra valores, quantidades, médias, faixas de metas, bônus e capacidade. Há exemplos de bônus diferentes por pessoa, inclusive 150/300/450 e 100/150/200. Não aplicar uma faixa universal nem chamar capacidade de meta aprovada.
+- Spike2 organiza quantidades por nome, unidade, exame e mês, além de indicadores internos. A função de cada nome (solicitante, executor ou laudador) deve ser confirmada; o arquivo sozinho não prova que são laudadores. Seu histórico se estende até 2026, não apenas 2022.
+- Há divergência entre a aba e datas, nomes com acentuação corrompida, cabeçalhos diferentes e meses sem aba. Tratar como pendências de qualidade, não corrigir datas nem completar valores por suposição. Aba ausente não prova atendimento ausente.
+
+**Não recobrar os seis arquivos já entregues.** Usá-los como referência. Ainda faltam: identificação da aplicação própria e responsável técnico, viabilidade/documentação da conexão, amostra e permissão do PDF caso necessário, catálogo e identidades vigentes antes de dados reais. Regras de repasse/comissão, período de validade, significado de cada valor e baseline de tempo só serão confirmados no momento previsto das fases seguintes; não criar cálculo financeiro na Fase 2. Importação automática de Excel não passa a fazer parte do escopo por esta revisão.
+
+### Onde Fábio responde
+
+Responder no chat do seu Maestro, na conversa da tarefa. Exemplo da T005: "Meu sistema próprio é [nome/link]. Quem cuida dele é [nome]. Ele já está em uso/em construção/não sei". O Maestro registra a resposta na tarefa; se precisar documentação técnica, explica quem deve fornecê-la e por quê. Senhas/chaves não vão no chat, no repositório ou na descrição da tarefa.
+
+### F2-T009 — Confirmar qual arquivo PDF pode ser usado como alternativa
+
+**Para que serve:** preparar a alternativa por PDF se a conexão automática não puder ser usada.
+**Já temos:** as seis planilhas Excel. Elas explicam o processo, mas não comprovam o formato de um PDF nem dão autorização para ler uma pasta.
+**Fábio responde no chat, só se ainda faltar:** (1) de qual documento PDF viriam os dados; (2) onde esse documento fica e quem pode autorizar a leitura. O Maestro explica que precisa apenas do modelo correspondente ao teste, não de prontuário clínico. Se a amostra for necessária, solicitar cópia fictícia ou anonimizada na pasta de contexto já usada e pedir que informe o nome; nunca solicitar senha. Não pedir todos os arquivos históricos.
+**O Maestro faz:** identifica campos e layout, registra original, versão, permissão de leitura e correspondência com as referências já entregues. Havendo texto que dependa de leitura de imagem, explica o que precisaria de revisão humana; serviço externo novo exige decisão, não envio automático.
+**Fábio aprova:** o Maestro mostra quais campos serão lidos e para onde vão; Fábio confirma que esse é o documento certo e o uso permitido. PDF é alternativa prevista, não rota automaticamente ativa.
+**Depende:** handoff da F1. **Parar:** PDF não recebido/aprovado, dado clínico, permissão ausente ou extração não disponível. **Prova:** F2-PDF-CONFIG-001 / CA-2-009, SPEC-2-003.
+
+### F2-T010 — Trazer um PDF de teste e conferir os dados na tela
+
+**Para que serve:** ler um PDF de teste e mostrar os dados antes de confirmar a entrada.
+**O Maestro faz:** usa somente modelo sintético aprovado na T009 e guarda a referência da página/linha de cada informação. Não escolhe um Excel no lugar do PDF nem altera o arquivo original.
+**Fábio confere:** (1) abre o PDF fictício indicado e a tela do Skip pelo link informado; (2) segue o botão real apresentado pelo Maestro para carregar o exemplo; (3) compara mês, profissional/unidade, quantidade e valores com a página de origem; (4) verifica que ausência de valor fica vazia, não zero; (5) somente com a prévia completa e correta confirma pela ação existente indicada. O Maestro explica cada campo e espera uma resposta por etapa; se houver divergência, não confirmar.
+**Depende:** T009 e T002. **Parar:** layout desconhecido, dado ambíguo, arquivo real não autorizado ou confirmação parcial. **Prova:** F2-PDF-001 / CA-2-010, SPEC-2-003.
+
+### F2-T011 — Conferir arquivos ilegíveis, incompletos ou repetidos
+
+**Para que serve:** impedir que arquivo repetido conte duas vezes e que documento ilegível vire dado inventado.
+**O Maestro faz:** prepara exemplos fictícios de PDF ilegível, modelo desconhecido, identidade ambígua, valor ausente, arquivo repetido e arquivo com mesmo nome mas conteúdo alterado; cobre também pasta vazia/acesso negado em simulação. Não expõe pacientes nem muda permissões reais.
+**Fábio confere:** (1) repete o PDF de teste da T010 pela ação real indicada; o total não muda; (2) recarrega e verifica o mesmo total; (3) acompanha um PDF ilegível e vê aviso com motivo, sem confirmação silenciosa; (4) vê a versão alterada apresentada como nova versão para revisão, preservando a anterior. Pedir aceite explícito ao final e explicar os avisos sem jargão.
+**Depende:** T010. **Parar:** duplicação, original perdido, preenchimento por suposição ou parcial confirmado. **Prova:** F2-PDF-ERROR-001 / CA-2-011, SPEC-2-003.
+
+### F2-T012 — Revisar o ciclo de teste e registrar a aprovação da fase
+
+**Para que serve:** encerrar a fase sabendo o que funciona, o que não se aplica e o que continua pendente.
+**O Maestro faz:** reúne as provas já produzidas sem editá-las, informa qual caminho foi usado (conexão ou PDF), o que não foi usado e por quê. Mostra origem, mês, totais, campos vazios, proteção contra repetição, recuperação e histórico. Não chama teste com dados fictícios de operação real.
+**Fábio confere:** (1) o Maestro mostra um exemplo completo desde a origem até a tela; (2) Fábio confere os totais e a identificação do exemplo; (3) acompanha a repetição e a recuperação previamente preparadas; (4) recebe uma lista simples do que falta antes de dados reais; (5) confirma ou aponta a etapa que não funcionou. Cada etapa deve ter o controle real e o resultado esperado explicados antes. Só registrar aprovação com sua confirmação explícita; não abrir fase seguinte automaticamente.
+**Depende:** T004, T008 e T011 conforme as regras de aplicabilidade das SPECs. **Parar:** evidência ausente ou teste humano pendente. **Prova:** F2-HANDOFF-001 / CA-2-012, SPEC-2-003.

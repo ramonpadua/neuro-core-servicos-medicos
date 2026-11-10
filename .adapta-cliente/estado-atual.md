@@ -13,3 +13,7 @@
 - ultima_acao: prova F2-CENTRAL-001 anexada em 05_entregas (commit ed6afd7); verificações automáticas concluídas
 - proxima_acao: aguardar teste humano do champion (roteiro na prova §6)
 - atualizado_em: 2026-10-15T16:35:00-03:00
+
+## Orientação de retomada — 10/11/2026
+
+Registro original acima preservado. Antes de qualquer tarefa nova, verificar aprovação posterior da T002; se não existir, conduzir apenas o teste humano descrito na seção F2-T002 da fase atual. Não reimplementar nem marcar tarefa automaticamente. A leitura das planilhas não prova uma integração ativa nem aprova fórmulas para uso atual.
